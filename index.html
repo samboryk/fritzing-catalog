@@ -1,78 +1,233 @@
 <!DOCTYPE html>
-<html lang="uk" data-theme="light">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Каталог Компонентів Fritzing</title>
+    <title>Fritzing Parts Hub</title>
     <style>
         :root {
-            --bg-color: #f0f0f0; --text-color: #000; --card-bg: #fff;
-            --border-color: #000; --accent-blue: #0055ff; --accent-red: #ff3333;
-            --accent-yellow: #ffcc00; --border-width: 3px; --shadow-color: #000;
-        }
-        [data-theme="dark"] {
-            --bg-color: #121212; --text-color: #fff; --card-bg: #1e1e1e;
-            --border-color: #fff; --shadow-color: var(--accent-blue);
+            --bg-deep: #0a0a0a;
+            --bg-panel: #1E1E1E;
+            --tech-blue: #3842EF;
+            --tech-glow: rgba(56, 66, 239, 0.4);
+            --text-main: #ffffff;
+            --text-muted: #8b949e;
+            --border-width: 1px;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--bg-color); color: var(--text-color); margin: 0; transition: background 0.3s; overflow-x: hidden; }
 
-        /* HEADER */
-        header { background: var(--accent-yellow); padding: 3rem 1rem; border-bottom: var(--border-width) solid var(--border-color); text-align: center; position: relative; }
-        [data-theme="dark"] header { background: #000; border-bottom-color: var(--accent-yellow); }
-        .author-badge { display: inline-block; background: var(--text-color); color: var(--bg-color); padding: 0.5rem 1rem; font-weight: 900; border: var(--border-width) solid var(--border-color); box-shadow: 4px 4px 0px var(--accent-red); text-transform: uppercase; margin-bottom: 1rem; }
-        h1 { margin: 0; font-size: 2rem; text-transform: uppercase; }
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-deep); 
+            color: var(--text-main); 
+            margin: 0; 
+            overflow-x: hidden;
+            /* Легка фонова сітка для всього сайту */
+            background-image: 
+                linear-gradient(rgba(56, 66, 239, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 66, 239, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
 
-        /* CONTROLS */
-        .controls { max-width: 900px; margin: 2rem auto; padding: 0 15px; display: flex; flex-direction: column; gap: 10px; }
-        .search-row { display: flex; gap: 10px; }
-        input, select, .fav-toggle-main { padding: 14px; font-weight: bold; border: var(--border-width) solid var(--border-color); background: var(--card-bg); color: var(--text-color); box-shadow: 4px 4px 0px var(--border-color); outline: none; }
-        input { flex: 2; } select { flex: 1; }
-        .fav-toggle-main { cursor: pointer; min-width: 60px; font-size: 20px; transition: 0.2s; }
-        .fav-toggle-main.active { background: var(--accent-red); color: #fff; }
+        /* --- ШАПКА --- */
+        header { 
+            background: var(--bg-panel); 
+            padding: 3rem 1rem 2rem; 
+            text-align: center;
+            border-bottom: 2px solid var(--tech-blue);
+            box-shadow: 0 0 20px var(--tech-glow);
+            position: relative;
+        }
 
-        /* GRID & CARDS */
-        main { max-width: 1400px; margin: 0 auto 3rem; padding: 0 1rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+        .author-badge { 
+            display: inline-block;
+            color: var(--tech-blue);
+            font-size: 0.75rem; 
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase; 
+            margin-bottom: 10px;
+            border: 1px solid var(--tech-blue);
+            padding: 4px 10px;
+            border-radius: 4px;
+            background: rgba(56, 66, 239, 0.1);
+        }
+
+        h1 { 
+            margin: 0 0 1.5rem 0; 
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            letter-spacing: 2px;
+            text-transform: uppercase; 
+            text-shadow: 0 0 10px var(--tech-glow);
+        }
+
+        /* --- КНОПКИ ЗАВАНТАЖЕННЯ (ПОВЕРНУЛИСЬ) --- */
+        .download-zone {
+            display: flex; justify-content: center; gap: 15px;
+            margin-bottom: 2rem; flex-wrap: wrap; padding: 0 10px;
+        }
+
+        .dl-btn {
+            background: rgba(56, 66, 239, 0.1);
+            color: var(--text-main);
+            border: 1px solid var(--tech-blue);
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 0 10px transparent;
+        }
+
+        .dl-btn:hover {
+            background: var(--tech-blue);
+            box-shadow: 0 0 15px var(--tech-glow);
+        }
+
+        /* --- ПАНЕЛЬ КЕРУВАННЯ --- */
+        .controls { 
+            max-width: 900px; margin: 0 auto 3rem; padding: 0 15px;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .search-row { display: flex; gap: 10px; width: 100%; }
+
+        input, select, .fav-toggle-main { 
+            background: var(--bg-panel);
+            color: var(--text-main);
+            border: 1px solid #333;
+            padding: 14px 20px; 
+            font-size: 0.9rem; 
+            font-family: inherit;
+            border-radius: 6px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input { flex: 2; } 
+        select { flex: 1; cursor: pointer; color: var(--text-muted); }
         
+        input:focus, select:focus { 
+            border-color: var(--tech-blue);
+            box-shadow: 0 0 10px var(--tech-glow);
+        }
+
+        .fav-toggle-main { 
+            cursor: pointer; min-width: 60px; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .fav-toggle-main.active { 
+            background: var(--tech-blue); 
+            border-color: var(--tech-blue);
+            box-shadow: 0 0 15px var(--tech-glow);
+        }
+
+        /* --- СІТКА КАРТОК --- */
+        main { max-width: 1400px; margin: 0 auto 4rem; padding: 0 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+
         .card { 
-            background: var(--card-bg); border: var(--border-width) solid var(--border-color); 
-            box-shadow: 5px 5px 0px var(--shadow-color); display: flex; flex-direction: column; 
-            position: relative; opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s, box-shadow 0.2s; 
+            background: var(--bg-panel); 
+            border: 1px solid #333;
+            border-radius: 8px;
+            display: flex; flex-direction: column; position: relative;
+            transition: all 0.3s ease;
+            opacity: 0; transform: translateY(20px);
+            overflow: hidden;
         }
         .card.visible { opacity: 1; transform: translateY(0); }
-        .card:hover { transform: translateY(-5px); box-shadow: 10px 10px 0px var(--shadow-color); }
+        
+        .card:hover { 
+            border-color: var(--tech-blue);
+            box-shadow: 0 0 20px var(--tech-glow);
+            transform: translateY(-5px);
+        }
 
         .fav-btn {
-            position: absolute; top: 10px; right: 10px; z-index: 10;
-            background: #fff; border: 2px solid #000; width: 40px; height: 40px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px;
-            box-shadow: 2px 2px 0px #000; transition: transform 0.1s;
+            position: absolute; top: 10px; right: 10px; z-index: 5;
+            background: rgba(30, 30, 30, 0.8); backdrop-filter: blur(4px);
+            border: 1px solid #444; width: 35px; height: 35px; border-radius: 6px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 16px; transition: 0.2s; color: #555;
         }
-        .fav-btn:active { transform: scale(0.8); }
-        .fav-btn.is-active { color: var(--accent-red); }
+        .fav-btn:hover { border-color: var(--tech-blue); }
+        .fav-btn.is-active { color: #ff3366; border-color: #ff3366; box-shadow: 0 0 10px rgba(255, 51, 102, 0.3); }
 
-        .card-image-wrapper { height: 200px; border-bottom: var(--border-width) solid var(--border-color); display: flex; align-items: center; justify-content: center; background: #fff; cursor: zoom-in; padding: 1rem; }
-        .card-image-wrapper img { max-width: 90%; max-height: 90%; object-fit: contain; }
-        .card-content { padding: 1rem; }
-        .category-badge { display: inline-block; font-size: 0.7rem; font-weight: 800; background: var(--accent-blue); color: #fff; padding: 2px 8px; border: 2px solid #000; margin-bottom: 5px; }
+        .card-image-wrapper { 
+            height: 200px; 
+            border-bottom: 1px solid #333;
+            display: flex; align-items: center; justify-content: center; padding: 1.5rem;
+            cursor: zoom-in;
+            /* Кібер-сітка під деталлю */
+            background-color: #161616;
+            background-image: 
+                linear-gradient(rgba(56, 66, 239, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 66, 239, 0.1) 1px, transparent 1px);
+            background-size: 15px 15px;
+            transition: border-color 0.3s ease;
+        }
+        .card:hover .card-image-wrapper { border-color: var(--tech-blue); }
+        .card-image-wrapper img { max-width: 90%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); transition: transform 0.3s ease; }
+        .card:hover .card-image-wrapper img { transform: scale(1.05); }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); flex-direction: column; }
-        .modal-toolbar { display: flex; background: #000; padding: 5px; gap: 5px; }
-        .modal-toolbar button { flex: 1; padding: 12px; font-weight: 900; cursor: pointer; border: 2px solid #000; }
+        .card-content { padding: 1.2rem; }
+        .category-badge { 
+            display: inline-block; font-size: 0.65rem; font-weight: 700;
+            background: rgba(56, 66, 239, 0.15); color: #8ba0ff;
+            padding: 3px 8px; border: 1px solid var(--tech-blue); border-radius: 4px;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+        }
+        h2 { margin: 0 0 8px; font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        p { margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+
+        /* --- МОДАЛЬНЕ ВІКНО --- */
+        .modal { 
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; 
+            width: 100%; height: 100%; background: rgba(10, 10, 10, 0.95); 
+            flex-direction: column; backdrop-filter: blur(5px);
+        }
+        .modal-toolbar { display: flex; justify-content: center; padding: 15px; gap: 10px; background: var(--bg-panel); border-bottom: 1px solid var(--tech-blue); }
+        .modal-toolbar button { 
+            background: transparent; color: var(--text-main);
+            border: 1px solid var(--tech-blue); padding: 10px 20px; border-radius: 4px;
+            font-weight: 700; cursor: pointer; transition: 0.2s; text-transform: uppercase;
+        }
+        .modal-toolbar button:hover { background: var(--tech-blue); box-shadow: 0 0 10px var(--tech-glow); }
+        .modal-toolbar button.close-btn { border-color: #ff3366; color: #ff3366; }
+        .modal-toolbar button.close-btn:hover { background: #ff3366; color: #fff; box-shadow: 0 0 10px rgba(255, 51, 102, 0.4); }
+
         .modal-scroll-area { flex-grow: 1; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .modal-scroll-area img { background: #fff; border: 3px solid #000; width: 90%; max-width: 600px; transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        .modal-scroll-area img { 
+            background: #fff; /* Деталь в зумі завжди на білому для чіткості креслень */
+            border: 2px solid var(--tech-blue); border-radius: 8px;
+            padding: 20px; box-shadow: 0 0 30px var(--tech-glow);
+            width: 80%; max-width: 600px; transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1); 
+        }
 
-        /* BACK TO TOP */
-        #backToTop { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: var(--accent-yellow); border: 3px solid #000; box-shadow: 4px 4px 0px #000; display: none; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; z-index: 1000; }
+        /* --- КНОПКА ВГОРУ --- */
+        #backToTop { 
+            position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; 
+            background: var(--bg-panel); color: var(--tech-blue); 
+            border: 1px solid var(--tech-blue); border-radius: 50%;
+            display: none; align-items: center; justify-content: center; 
+            font-size: 20px; cursor: pointer; z-index: 100;
+            box-shadow: 0 0 15px var(--tech-glow); transition: all 0.2s;
+        }
+        #backToTop:hover { background: var(--tech-blue); color: #fff; transform: translateY(-3px); }
 
         @media (max-width: 600px) {
-            header { padding: 4rem 1rem 2rem; }
+            header { padding: 3rem 1rem 1.5rem; }
+            h1 { font-size: 1.8rem; }
             .search-row { flex-direction: column; }
+            .fav-toggle-main { width: 100%; }
             .grid { grid-template-columns: 1fr; }
+            .dl-btn { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -80,28 +235,33 @@
 
 <div id="imageModal" class="modal">
     <div class="modal-toolbar">
-        <button onclick="zoomOut()">➖</button>
+        <button onclick="zoomOut()">➖ Менше</button>
         <button onclick="zoomReset()">1:1</button>
-        <button onclick="zoomIn()">➕</button>
-        <button style="background:var(--accent-red); color:#fff;" onclick="forceCloseModal()">✖</button>
+        <button onclick="zoomIn()">➕ Більше</button>
+        <button class="close-btn" onclick="forceCloseModal()">✖ Закрити</button>
     </div>
     <div class="modal-scroll-area" id="scrollArea" onclick="closeModal(event)">
         <img id="zoomedImage" onclick="event.stopPropagation()"> 
     </div>
-    <div id="zoomedTitle" style="background:#000; color:var(--accent-yellow); text-align:center; padding:10px; font-weight:bold; font-size:12px; text-transform:uppercase;"></div>
+    <div id="zoomedTitle" style="text-align:center; padding:15px; font-weight:700; color:var(--tech-blue); font-size:12px; text-transform:uppercase; letter-spacing:2px; background:var(--bg-panel); border-top:1px solid var(--tech-blue);"></div>
 </div>
 
-<button id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+<button id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">▲</button>
 
 <header>
-    <button id="themeBtn" style="position:absolute; top:10px; right:10px; padding:5px 10px; font-weight:900; cursor:pointer;" onclick="toggleTheme()">🌙</button>
-    <div class="author-badge">Made by SAMBORYK</div>
-    <h1>Каталог Деталей Fritzing</h1>
+    <div class="author-badge">MADE BY SAMBORYK</div>
+    <h1>Fritzing Parts Hub</h1>
+    
+    <div class="download-zone">
+        <a href="All_Components_Organized.fz" class="dl-btn" download>📥 Завантажити .FZ</a>
+        <a href="Catalog.pdf" class="dl-btn" download>📄 Завантажити PDF</a>
+    </div>
+
     <div class="controls">
         <div class="search-row">
-            <input type="text" id="searchInput" placeholder="Пошук за назвою..." oninput="render()">
-            <select id="categoryFilter" onchange="render()"><option value="all">УСІ КАТЕГОРІЇ</option></select>
-            <button id="favToggle" class="fav-toggle-main" onclick="toggleShowFavs()">❤️</button>
+            <input type="text" id="searchInput" placeholder="Сканувати базу даних..." oninput="render()">
+            <select id="categoryFilter" onchange="render()"><option value="all">Усі модулі</option></select>
+            <button id="favToggle" class="fav-toggle-main" title="Обране" onclick="toggleShowFavs()">❤️</button>
         </div>
     </div>
 </header>
@@ -112,34 +272,21 @@
     let components = [];
     let favorites = JSON.parse(localStorage.getItem('fritzing_favs')) || [];
     let showOnlyFavs = false;
-    let currentZoom = 90;
+    let currentZoom = 80;
 
-    // Звук кліку (Web Audio API)
-    function playClickSound() {
+    // Технологічний звук (короткий високочастотний піск)
+    const playClick = () => {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(800, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.1, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+        osc.type = 'sine'; osc.frequency.setValueAtTime(1200, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
         osc.connect(gain); gain.connect(ctx.destination);
-        osc.start(); osc.stop(ctx.currentTime + 0.1);
-    }
-
-    // Вібрація
-    function triggerHaptic() {
-        if (navigator.vibrate) navigator.vibrate(20);
-    }
-
-    const setTheme = (t) => {
-        document.documentElement.setAttribute("data-theme", t);
-        localStorage.setItem("theme", t);
-        document.getElementById("themeBtn").innerText = t === "light" ? "🌙" : "☀️";
+        osc.start(); osc.stop(ctx.currentTime + 0.05);
+        if (navigator.vibrate) navigator.vibrate(15);
     };
-    setTheme(localStorage.getItem("theme") || "light");
-    function toggleTheme() { setTheme(document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light"); }
 
     window.onscroll = () => { document.getElementById("backToTop").style.display = (window.pageYOffset > 400) ? "flex" : "none"; };
 
@@ -159,29 +306,25 @@
 
     function toggleFav(id, btn, event) {
         event.stopPropagation();
-        playClickSound();
-        triggerHaptic();
-        
+        playClick();
         const idx = favorites.indexOf(id);
         if (idx > -1) favorites.splice(idx, 1);
         else favorites.push(id);
-        
         localStorage.setItem('fritzing_favs', JSON.stringify(favorites));
         
-        // Оновлюємо тільки кнопку, а не всю сітку
         btn.classList.toggle('is-active');
         btn.innerText = favorites.includes(id) ? '❤️' : '🤍';
-        
-        if (showOnlyFavs) render(); // Якщо ми в режимі "Тільки обране", треба перерендерити
+        if (showOnlyFavs) render();
     }
 
     function toggleShowFavs() {
         showOnlyFavs = !showOnlyFavs;
+        playClick();
         document.getElementById("favToggle").classList.toggle("active", showOnlyFavs);
         render(true);
     }
 
-    function render(isNewQuery = false) {
+    function render(isNew = false) {
         const s = document.getElementById("searchInput").value.toLowerCase();
         const c = document.getElementById("categoryFilter").value;
         const g = document.getElementById("catalogGrid");
@@ -193,40 +336,42 @@
             return mS && mC && mF;
         });
 
-        g.innerHTML = filtered.length ? "" : '<div style="grid-column:1/-1; text-align:center; padding:50px; font-weight:bold;">ПОРОЖНЬО 🕵️‍♂️</div>';
+        g.innerHTML = filtered.length ? "" : '<div style="grid-column:1/-1; text-align:center; padding:5rem; color:var(--tech-blue); font-weight:800; letter-spacing:2px;">СИСТЕМНА ПОМИЛКА: МОДУЛЬ НЕ ЗНАЙДЕНО</div>';
         
         filtered.forEach((i, idx) => {
             const isF = favorites.includes(i.id);
             const card = document.createElement("div"); 
             card.className = "card";
-            if (!isNewQuery) card.classList.add('visible'); // Не анімувати, якщо це не новий пошук
-
-            const img = `images/${i.id}.svg`;
+            card.style.transitionDelay = isNew ? `${(idx % 15) * 0.03}s` : '0s'; // Швидший каскад
+            if (!isNew) card.classList.add('visible');
+            
+            const imgSrc = `images/${i.id}.svg`;
             card.innerHTML = `
-                <button class="fav-btn ${isF ? 'is-active' : ''}" onclick="toggleFav('${i.id}', this, event)">${isF ? '❤️' : '🤍'}</button>
-                <div class="card-image-wrapper" onclick="openModal('${img}', '${i.title.replace(/'/g, "\\'")}')">
-                    <img src="${img}" loading="lazy" onerror="this.src='https://placehold.co/200/ffffff/000000?text=No+Img'">
+                <button class="fav-btn ${isF ? 'is-active' : ''}" title="Додати до плати" onclick="toggleFav('${i.id}', this, event)">${isF ? '❤️' : '🤍'}</button>
+                <div class="card-image-wrapper" onclick="openModal('${imgSrc}', '${i.title.replace(/'/g, "\\'")}')">
+                    <img src="${imgSrc}" loading="lazy" onerror="this.src='https://placehold.co/200/1E1E1E/3842EF?text=SYS.ERR'">
                 </div>
                 <div class="card-content">
-                    <div class="category-badge">${i.category}</div>
-                    <h2 style="margin:0; font-size:1.1rem;">${i.title}</h2><p style="font-size:0.85rem; opacity:0.8;">${i.description}</p>
+                    <span class="category-badge">${i.category}</span>
+                    <h2>${i.title}</h2>
+                    <p>${i.description}</p>
                 </div>`;
             g.appendChild(card);
-            if (isNewQuery) observer.observe(card);
+            if (isNew) observer.observe(card);
         });
     }
 
-    // Modal Zoom Logic
     const m = document.getElementById("imageModal"), zoomImg = document.getElementById("zoomedImage");
     function openModal(s, t) {
-        m.style.display = "flex"; zoomImg.src = s; document.getElementById("zoomedTitle").innerText = t;
+        playClick();
+        m.style.display = "flex"; zoomImg.src = s; document.getElementById("zoomedTitle").innerText = "ІНСПЕКЦІЯ: " + t;
         currentZoom = window.innerWidth < 600 ? 90 : 60; applyZoom();
     }
     const forceCloseModal = () => m.style.display = "none";
     const closeModal = (e) => { if(e.target.id === "scrollArea") forceCloseModal(); };
-    function applyZoom() { zoomImg.style.width = currentZoom + "%"; zoomImg.style.maxWidth = currentZoom > 100 ? "none" : "600px"; }
-    function zoomIn() { currentZoom += 40; applyZoom(); }
-    function zoomOut() { if(currentZoom > 40) currentZoom -= 40; applyZoom(); }
+    function applyZoom() { zoomImg.style.width = currentZoom + "%"; zoomImg.style.maxWidth = currentZoom > 100 ? "none" : "800px"; }
+    function zoomIn() { currentZoom += 30; applyZoom(); }
+    function zoomOut() { if(currentZoom > 30) currentZoom -= 30; applyZoom(); }
     function zoomReset() { currentZoom = (window.innerWidth < 600 ? 90 : 60); applyZoom(); }
 </script>
 </body>
