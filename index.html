@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Каталог Компонентів Fritzing</title>
+    <style>
+        /* --- CSS ЗМІННІ (СВІТЛА ТА ТЕМНА ТЕМИ) --- */
+        :root {
+            --bg-color: #f0f0f0;
+            --text-color: #000000;
+            --card-bg: #ffffff;
+            --border-color: #000000;
+            --accent-blue: #0055ff;
+            --accent-red: #ff3333;
+            --accent-yellow: #ffcc00;
+            --accent-green: #00aa55;
+            --border-width: 3px;
+            --img-bg: #ffffff;
+            --img-pattern: #d4d4d4;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --card-bg: #1e1e1e;
+            --border-color: #ffffff;
+            --accent-yellow: #eab308;
+            --img-bg: #e5e5e5;
+            --img-pattern: #a3a3a3;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0; padding: 0; line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- ШАПКА ТА АВТОРСЬКИЙ БЕЙДЖ --- */
+        header {
+            background-color: var(--accent-yellow);
+            padding: 3rem 1rem;
+            border-bottom: var(--border-width) solid var(--border-color);
+            text-align: center;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .author-badge {
+            display: inline-block;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            padding: 0.5rem 1rem;
+            font-weight: 900;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            border: var(--border-width) solid var(--border-color);
+            box-shadow: 4px 4px 0px var(--accent-red);
+            text-transform: uppercase;
+        }
+
+        h1 { margin: 0 0 1rem 0; font-size: 3rem; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
+
+        /* --- НОВІ КНОПКИ ЗАВАНТАЖЕННЯ --- */
+        .download-zone {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .dl-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            font-weight: 900;
+            text-decoration: none;
+            text-transform: uppercase;
+            border: var(--border-width) solid var(--border-color);
+            color: #fff;
+            transition: transform 0.1s, box-shadow 0.1s;
+            cursor: pointer;
+        }
+
+        .dl-btn.fz { background-color: var(--accent-blue); box-shadow: 5px 5px 0px var(--border-color); }
+        .dl-btn.pdf { background-color: var(--accent-red); box-shadow: 5px 5px 0px var(--border-color); }
+
+        .dl-btn:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0px var(--border-color); }
+
+        /* --- КНОПКА ТЕМИ --- */
+        .theme-toggle-btn {
+            position: absolute; top: 1.5rem; right: 1.5rem;
+            background-color: var(--card-bg); color: var(--text-color);
+            border: var(--border-width) solid var(--border-color);
+            padding: 0.5rem 1rem; font-weight: 900; cursor: pointer;
+            box-shadow: 4px 4px 0px var(--border-color); text-transform: uppercase;
+        }
+
+        /* --- ПАНЕЛЬ КЕРУВАННЯ --- */
+        .controls {
+            display: flex; flex-wrap: wrap; gap: 1rem;
+            justify-content: center; max-width: 800px; margin: 0 auto;
+        }
+
+        input, select {
+            padding: 1rem; font-size: 1rem; font-weight: bold; color: var(--text-color);
+            border: var(--border-width) solid var(--border-color);
+            background-color: var(--card-bg); outline: none;
+            box-shadow: 4px 4px 0px var(--border-color); cursor: pointer;
+        }
+
+        input { flex: 1; min-width: 250px; cursor: text; }
+
+        /* --- СІТКА КАРТОК --- */
+        main { max-width: 1400px; margin: 3rem auto; padding: 0 1.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
+
+        .card {
+            background-color: var(--card-bg); border: var(--border-width) solid var(--border-color);
+            box-shadow: 6px 6px 0px var(--border-color); display: flex; flex-direction: column;
+            transition: transform 0.1s;
+        }
+
+        .card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0px var(--border-color); }
+
+        .card-image-wrapper {
+            height: 220px; background-color: var(--img-bg);
+            border-bottom: var(--border-width) solid var(--border-color);
+            display: flex; align-items: center; justify-content: center; padding: 1.5rem;
+            background-image: radial-gradient(var(--img-pattern) 1px, transparent 0);
+            background-size: 15px 15px; cursor: zoom-in;
+        }
+
+        .card-image-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        .card-content { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
+
+        .category-badge {
+            display: inline-block; align-self: flex-start; font-size: 0.8rem; text-transform: uppercase;
+            font-weight: 800; background-color: var(--accent-blue); color: #fff;
+            padding: 0.3rem 0.6rem; border: 2px solid var(--border-color); margin-bottom: 1rem;
+        }
+
+        .card h2 { margin: 0 0 1rem 0; font-size: 1.3rem; font-weight: 800; }
+
+        /* --- МОДАЛКА ЗУМУ --- */
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); flex-direction: column;
+        }
+
+        .modal-toolbar { display: flex; justify-content: center; gap: 1rem; padding: 1rem; background-color: var(--border-color); }
+        .modal-toolbar button {
+            background-color: var(--card-bg); border: 2px solid var(--border-color);
+            padding: 0.5rem 1.5rem; font-weight: 900; cursor: pointer; text-transform: uppercase;
+        }
+        .modal-toolbar button.close-btn { background-color: var(--accent-red); color: #fff; }
+
+        .modal-scroll-area { flex-grow: 1; overflow: auto; text-align: center; padding: 2rem; }
+        .modal-scroll-area img {
+            width: 100%; max-width: 800px; background-color: #fff;
+            border: var(--border-width) solid var(--border-color); padding: 2rem;
+            box-shadow: 12px 12px 0px var(--accent-blue); margin: 0 auto;
+        }
+
+        /* --- АДАПТАЦІЯ --- */
+        @media (max-width: 768px) {
+            header { padding: 5rem 1rem 2rem 1rem; }
+            .theme-toggle-btn { top: 1rem; right: 50%; transform: translateX(50%); }
+            h1 { font-size: 2rem; }
+            .download-zone { flex-direction: column; gap: 1rem; }
+            .dl-btn { width: 100%; justify-content: center; }
+            .controls { flex-direction: column; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-toolbar">
+            <button onclick="zoomOut()">➖</button>
+            <button onclick="zoomReset()">Оригінал</button>
+            <button onclick="zoomIn()">➕</button>
+            <button class="close-btn" onclick="forceCloseModal()">✖</button>
+        </div>
+        <div class="modal-scroll-area" id="scrollArea" onclick="closeModal(event)">
+            <img id="zoomedImage" onclick="event.stopPropagation()"> 
+        </div>
+        <div class="modal-title" id="zoomedTitle" style="color:white; text-align:center; padding:1rem; background:black; font-weight:bold;"></div>
+    </div>
+
+    <header>
+        <button id="themeBtn" class="theme-toggle-btn" onclick="toggleTheme()">🌙 Темна Тема</button>
+        <div class="author-badge">Made by SAMBORYK</div>
+        <h1>Каталог Деталей</h1>
+        
+        <div class="download-zone">
+            <a href="All_Components_Organized.fz" class="dl-btn fz" download>
+                💾 Завантажити .FZ
+            </a>
+            <a href="Catalog.pdf" class="dl-btn pdf" download>
+                📄 Завантажити PDF
+            </a>
+        </div>
+
+        <div class="controls">
+            <select id="categoryFilter">
+                <option value="all">УСІ СЕКЦІЇ</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="ПОШУК КОМПОНЕНТА...">
+        </div>
+    </header>
+
+    <main>
+        <div id="catalogGrid" class="grid"></div>
+    </main>
+
+    <script>
+        let components = [];
+        let currentZoomLevel = 100; 
+
+        // Тема
+        const htmlEl = document.documentElement;
+        const themeBtn = document.getElementById("themeBtn");
+        const savedTheme = localStorage.getItem("theme") || "light";
+        setTheme(savedTheme);
+
+        function toggleTheme() {
+            const currentTheme = htmlEl.getAttribute("data-theme");
+            setTheme(currentTheme === "light" ? "dark" : "light");
+        }
+
+        function setTheme(theme) {
+            htmlEl.setAttribute("data-theme", theme);
+            localStorage.setItem("theme", theme);
+            themeBtn.innerText = theme === "light" ? "🌙 Темна Тема" : "☀️ Світла Тема";
+        }
+
+        // Дані
+        fetch('catalog.json')
+            .then(res => res.json())
+            .then(data => {
+                components = data;
+                initFilters();
+                renderCatalog(components);
+            });
+
+        function initFilters() {
+            const categories = [...new Set(components.map(c => c.category))];
+            const filterSelect = document.getElementById('categoryFilter');
+            categories.sort().forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = opt.textContent = cat;
+                filterSelect.appendChild(opt);
+            });
+        }
+
+        function renderCatalog(items) {
+            const grid = document.getElementById('catalogGrid');
+            grid.innerHTML = '';
+            const badgeColors = ['var(--accent-blue)', 'var(--accent-red)', '#00aa55', '#ff8800'];
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const imgSrc = `images/${item.id}.svg`;
+                const fallback = "https://placehold.co/400x300/ffffff/000000?text=NO+IMAGE";
+                
+                card.innerHTML = `
+                    <div class="card-image-wrapper" onclick="openModal('${imgSrc}', '${item.title}')">
+                        <img src="${imgSrc}" loading="lazy" onerror="this.src='${fallback}'">
+                    </div>
+                    <div class="card-content">
+                        <div class="category-badge" style="background:${badgeColors[item.category.length % 4]}">${item.category}</div>
+                        <h2>${item.title}</h2>
+                        <p>${item.description}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterData() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const cat = document.getElementById('categoryFilter').value;
+            const filtered = components.filter(i => {
+                return (i.title.toLowerCase().includes(search) || i.description.toLowerCase().includes(search)) &&
+                       (cat === 'all' || i.category === cat);
+            });
+            renderCatalog(filtered);
+        }
+
+        // Модалка
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("zoomedImage");
+        function openModal(src, title) {
+            modal.style.display = "flex";
+            modalImg.src = src;
+            document.getElementById("zoomedTitle").innerText = title;
+            zoomReset();
+        }
+        function closeModal(e) { if (e.target.id === "scrollArea") forceCloseModal(); }
+        function forceCloseModal() { modal.style.display = "none"; }
+        function zoomIn() { currentZoomLevel += 50; applyZoom(); }
+        function zoomOut() { if(currentZoomLevel > 50) currentZoomLevel -= 50; applyZoom(); }
+        function zoomReset() { currentZoomLevel = 100; applyZoom(); }
+        function applyZoom() {
+            modalImg.style.maxWidth = currentZoomLevel === 100 ? "800px" : "none";
+            modalImg.style.width = (8 * currentZoomLevel) + "px";
+        }
+
+        document.getElementById('searchInput').addEventListener('input', filterData);
+        document.getElementById('categoryFilter').addEventListener('change', filterData);
+    </script>
+</body>
+</html>
