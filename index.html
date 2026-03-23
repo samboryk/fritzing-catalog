@@ -16,6 +16,7 @@
             --border-width: 3px;
             --img-bg: #ffffff;
             --img-pattern: #d4d4d4;
+            --shadow-color: rgba(0,0,0,1);
         }
 
         [data-theme="dark"] {
@@ -23,19 +24,22 @@
             --text-color: #ffffff;
             --card-bg: #1e1e1e;
             --border-color: #ffffff;
-            --accent-yellow: #eab308;
-            --img-bg: #e5e5e5;
-            --img-pattern: #a3a3a3;
+            --accent-yellow: #ffcc00;
+            --img-bg: #f5f5f5; /* Фон картинки залишаємо світлим для видимості деталей */
+            --img-pattern: #ccc;
+            --shadow-color: var(--accent-blue); /* Кольорова тінь у темній темі */
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-width; }
 
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0; padding: 0; line-height: 1.5;
-            overflow-x: hidden; /* Заборона горизонтального скролу сайту */
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         header {
@@ -45,6 +49,8 @@
             text-align: center;
             position: relative;
         }
+
+        [data-theme="dark"] header { background-color: #000; border-bottom: var(--border-width) solid var(--accent-yellow); }
 
         .author-badge {
             display: inline-block;
@@ -60,16 +66,17 @@
         }
 
         h1 { margin: 0 0 1.5rem 0; font-size: 2.5rem; font-weight: 900; text-transform: uppercase; }
+        [data-theme="dark"] h1 { color: var(--accent-yellow); }
 
         .theme-toggle-btn {
             position: absolute; top: 1rem; right: 1rem;
             background-color: var(--card-bg); color: var(--text-color);
             border: var(--border-width) solid var(--border-color);
-            padding: 0.5rem; font-weight: 900; cursor: pointer;
+            padding: 0.5rem 1rem; font-weight: 900; cursor: pointer;
             box-shadow: 3px 3px 0px var(--border-color);
+            text-transform: uppercase;
         }
 
-        /* Кнопки завантаження */
         .download-zone {
             display: flex; justify-content: center; gap: 1rem;
             margin-bottom: 2rem; flex-wrap: wrap; padding: 0 1rem;
@@ -83,7 +90,6 @@
         .dl-btn.fz { background-color: var(--accent-blue); }
         .dl-btn.pdf { background-color: var(--accent-red); }
 
-        /* ПАНЕЛЬ КЕРУВАННЯ (ВИПРАВЛЕНО) */
         .controls {
             display: flex; flex-wrap: wrap; gap: 10px;
             justify-content: center; max-width: 900px; margin: 0 auto;
@@ -94,7 +100,7 @@
             padding: 12px; font-size: 16px; font-weight: bold;
             color: var(--text-color); border: var(--border-width) solid var(--border-color);
             background-color: var(--card-bg); box-shadow: 4px 4px 0px var(--border-color);
-            width: 100%; max-width: 100%;
+            width: 100%;
         }
 
         @media (min-width: 768px) {
@@ -103,14 +109,16 @@
             .controls { flex-wrap: nowrap; }
         }
 
-        /* КАРТКИ */
         main { max-width: 1400px; margin: 2rem auto; padding: 0 1rem; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
 
         .card {
             background-color: var(--card-bg); border: var(--border-width) solid var(--border-color);
-            box-shadow: 5px 5px 0px var(--border-color); display: flex; flex-direction: column;
+            box-shadow: 5px 5px 0px var(--shadow-color); display: flex; flex-direction: column;
+            transition: transform 0.1s, box-shadow 0.1s;
         }
+
+        .card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0px var(--shadow-color); }
 
         .card-image-wrapper {
             height: 200px; background-color: var(--img-bg);
@@ -127,40 +135,51 @@
             padding: 0.2rem 0.5rem; border: 2px solid var(--border-color); margin-bottom: 0.5rem;
         }
         h2 { margin: 0 0 0.5rem 0; font-size: 1.1rem; font-weight: 800; }
-        p { margin: 0; font-size: 0.9rem; }
+        p { margin: 0; font-size: 0.9rem; opacity: 0.9; }
 
-        /* МОДАЛКА ЗУМУ (ВИПРАВЛЕНО АДАПТАЦІЮ КНОПОК) */
         .modal {
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; 
-            width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9);
+            width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95);
             flex-direction: column;
         }
 
         .modal-toolbar {
             display: flex; flex-wrap: wrap; width: 100%;
-            background-color: var(--border-color); padding: 5px; gap: 5px;
+            background-color: #000; padding: 5px; gap: 5px;
+            border-bottom: 2px solid var(--accent-yellow);
         }
 
         .modal-toolbar button {
             flex: 1; min-width: 80px; padding: 12px 5px;
-            font-size: 14px; font-weight: 900; border: 2px solid #fff;
+            font-size: 14px; font-weight: 900; border: 2px solid #000;
             background: #fff; cursor: pointer; text-transform: uppercase;
         }
         .modal-toolbar button.close-btn { background: var(--accent-red); color: #fff; }
 
         .modal-scroll-area { flex-grow: 1; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 10px; }
         .modal-scroll-area img {
-            background: #fff; border: 3px solid #000; padding: 10px;
-            transition: width 0.2s ease; width: 90%; max-width: 600px;
+            background: #fff; border: 3px solid #000; padding: 15px;
+            transition: width 0.2s ease; width: 90%; max-width: 650px;
+            box-shadow: 10px 10px 0px var(--accent-blue);
         }
 
-        .modal-title { background: #000; color: #fff; text-align: center; padding: 10px; font-size: 14px; font-weight: bold; }
+        .modal-title { background: #000; color: var(--accent-yellow); text-align: center; padding: 10px; font-size: 14px; font-weight: bold; text-transform: uppercase; border-top: 1px solid #333; }
 
-        /* АДАПТАЦІЯ ДЛЯ ТЕЛЕФОНІВ */
+        #backToTop {
+            position: fixed; bottom: 20px; right: 20px;
+            width: 50px; height: 50px;
+            background-color: var(--accent-yellow); color: #000;
+            border: var(--border-width) solid var(--border-color);
+            box-shadow: 4px 4px 0px var(--border-color);
+            display: none; align-items: center; justify-content: center;
+            font-size: 24px; font-weight: bold; cursor: pointer; z-index: 1000;
+        }
+        [data-theme="dark"] #backToTop { box-shadow: 4px 4px 0px var(--accent-blue); }
+
         @media (max-width: 600px) {
-            header { padding: 4rem 10px 2rem 10px; }
+            header { padding: 5rem 10px 2rem 10px; }
             h1 { font-size: 1.8rem; }
-            .theme-toggle-btn { right: 50%; transform: translateX(50%); top: 0.5rem; width: 180px; }
+            .theme-toggle-btn { right: 50%; transform: translateX(50%); top: 0.5rem; width: 180px; font-size: 0.8rem; }
             .grid { grid-template-columns: 1fr; }
             .dl-btn { width: 100%; text-align: center; font-size: 14px; }
         }
@@ -181,6 +200,8 @@
     <div id="zoomedTitle" class="modal-title"></div>
 </div>
 
+<button id="backToTop" title="Нагору" onclick="window.scrollTo(0,0)">↑</button>
+
 <header>
     <button id="themeBtn" class="theme-toggle-btn" onclick="toggleTheme()">🌙 Темна Тема</button>
     <div class="author-badge">Made by SAMBORYK</div>
@@ -193,7 +214,7 @@
 
     <div class="controls">
         <select id="categoryFilter"><option value="all">УСІ КАТЕГОРІЇ</option></select>
-        <input type="text" id="searchInput" placeholder="Пошук...">
+        <input type="text" id="searchInput" placeholder="Пошук компонента за назвою...">
     </div>
 </header>
 
@@ -203,7 +224,6 @@
     let components = [];
     let currentZoom = 90; 
 
-    // Тема
     const setTheme = (t) => {
         document.documentElement.setAttribute("data-theme", t);
         localStorage.setItem("theme", t);
@@ -212,7 +232,11 @@
     setTheme(localStorage.getItem("theme") || "light");
     const toggleTheme = () => setTheme(document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light");
 
-    // Завантаження даних
+    window.onscroll = function() {
+        const btn = document.getElementById("backToTop");
+        btn.style.display = (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) ? "flex" : "none";
+    };
+
     fetch('catalog.json').then(res => res.json()).then(data => {
         components = data;
         const cats = [...new Set(data.map(i => i.category))].sort();
@@ -225,13 +249,13 @@
 
     function render(items) {
         const g = document.getElementById("catalogGrid");
-        g.innerHTML = items.length ? "" : '<div class="empty-state">Нічого не знайдено</div>';
+        g.innerHTML = items.length ? "" : '<div class="empty-state">Нічого не знайдено 🕵️‍♂️</div>';
         items.forEach(i => {
             const c = document.createElement("div"); c.className = "card";
             const img = `images/${i.id}.svg`;
             c.innerHTML = `
                 <div class="card-image-wrapper" onclick="openModal('${img}', '${i.title}')">
-                    <img src="${img}" loading="lazy" onerror="this.src='https://placehold.co/200?text=No+Img'">
+                    <img src="${img}" loading="lazy" onerror="this.src='https://placehold.co/200/ffffff/000000?text=Немає+Фото'">
                 </div>
                 <div class="card-content">
                     <div class="category-badge">${i.category}</div>
@@ -249,7 +273,6 @@
     document.getElementById("searchInput").oninput = filter;
     document.getElementById("categoryFilter").onchange = filter;
 
-    // Модалка
     const m = document.getElementById("imageModal"), img = document.getElementById("zoomedImage");
     function openModal(s, t) {
         m.style.display = "flex"; img.src = s; document.getElementById("zoomedTitle").innerText = t;
@@ -260,11 +283,11 @@
     
     function applyZoom() {
         img.style.width = currentZoom + "%";
-        img.style.maxWidth = currentZoom > 100 ? "none" : "600px";
+        img.style.maxWidth = currentZoom > 100 ? "none" : "650px";
     }
     function zoomIn() { currentZoom += 40; applyZoom(); }
     function zoomOut() { if(currentZoom > 40) currentZoom -= 40; applyZoom(); }
-    function zoomReset() { currentZoom = 90; applyZoom(); }
+    function zoomReset() { currentZoom = (window.innerWidth < 600 ? 90 : 60); applyZoom(); }
 </script>
 </body>
 </html>
